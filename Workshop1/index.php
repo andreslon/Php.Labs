@@ -793,7 +793,7 @@ socio y el.
                                     } 
                                 ?>
                                 <h6>Total inversión hipoteca :  $ <?php echo $eje12res0; ?></h6>
-                                <h6>Total inversión popia :  $ <?php echo $eje12res1; ?></h6>
+                                <h6>Total inversión propia :  $ <?php echo $eje12res1; ?></h6>
                                 <h6>Total inversión del socio :  $ <?php echo $eje12res2; ?></h6>
 
 
