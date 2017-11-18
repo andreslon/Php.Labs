@@ -1,0 +1,2 @@
+Codigo: 111,Nombre: Andres Londoño,Salario: 2000000,Auxilio de transporte: 0,Horas Extras: 2,Valor Hora Extra: 10000,Deducciones: 160000,Total Pagado: 1860000,Fecha: 14-10-2017 13:01:59
+Codigo: 222,Nombre: Stefania ospina,Salario: 600000,Auxilio de transporte: 83140,Horas Extras: 2,Valor Hora Extra: 20000,Deducciones: 48000,Total Pagado: 675140,Fecha: 14-10-2017 13:02:41

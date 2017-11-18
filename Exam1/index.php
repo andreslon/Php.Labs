@@ -191,7 +191,7 @@
                                               $horasTrabajo= $Horas;
                                           }else {
                                               $horasTrabajo= 40;
-                                              if(($Horas-40)-40<=8){
+                                              if(($Horas-40)<=8){
                                                   $horasExtra= $Horas - 40;
                                               }else{
                                                   $horasExtra=8;
