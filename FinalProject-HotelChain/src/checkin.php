@@ -22,9 +22,9 @@
                             <div class="dropdown profile-element">
                                 <span>
                                     <i style="color: white;
-    font-size: 40px;
-    background-color: black;
-    padding: 10px;" class="fa fa-user img-circle"></i>
+                                                font-size: 40px;
+                                                background-color: black;
+                                                padding: 10px;" class="fa fa-user img-circle"></i>
                                 </span>
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                     <span class="clear">
@@ -38,10 +38,10 @@
                            H-C
                             </div>
                         </li>
-                         <li class="active">
+                        <li class="active">
                             <a href="index.php"><i class="fa fa-list"></i> <span class="nav-label">Inicio</span></a>
                         </li>
-                        <li >
+                        <li>
                             <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Administrar</span> <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li><a href="rooms.php">Hábitaciones</a></li>
@@ -83,19 +83,15 @@
 
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <h5>Huespedes en el hotel</h5>
+                                <h5>Reservas</h5>
 
                             </div>
                             <div class="ibox-content">
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Código Huesped</th>
-                                        <th>Nombre Huesped</th>
-                                        <th>Código Habitación</th>
-                                        <th>Piso Habitación</th>
-                                        <th>Descripción habitación</th>
-                                        <th>Costos $</th>
+                                        <th>Codigo de huesped</th>
+                                        <th>Codigo de habitación</th>
                                     </tr>
                            </thead>
                                     <tbody>
@@ -104,22 +100,21 @@
                                             session_start();
                                             include_once "conexion.php"; 
                                             
-                                              
-                                                $sql = "SELECT id, username, password FROM users";
+                                            
+                                                $sql = "SELECT CodigoHuesped, CodigoHabitacion FROM reservations";
                                                 $result = mysql_query($sql);
                                             
                                                 if (mysql_num_rows($result) > 0) {
                                                     // output data of each row
                                                     while($row = mysql_fetch_assoc($result)) {
                                                         echo "<tr>
-                                                                <td>".$row["id"]."</td>
-                                                                <td>".$row["username"]."</td>
-                                                                <td>".$row["password"]."</td>
+                                                                <td>".$row["CodigoHuesped"]."</td>
+                                                                <td>".$row["CodigoHabitacion"]."</td>
                                                             </tr>";
                                                     }
                                                 }  
-                                        ?> 
-                           </tbody>
+                                        ?>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
