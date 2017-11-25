@@ -2,59 +2,41 @@
     session_start();
     include_once "conexion.php"; 
     
-    if(isset($_POST['save']))
+    if(isset($_POST['expense']))
         {
-            if($_POST['HDIdSave']>0){
-                $sql = "UPDATE guests SET 
-                codigo='".$_POST['codigo']."',
-                nombre='".$_POST['nombre']."',
-                apellido='".$_POST['apellido']."',
-                edad='".$_POST['edad']."',
-                sexo='".$_POST['sexo']." ' 
-                WHERE id=".$_POST['HDIdSave'];
+            if(!$_POST['HDId']>0){
+    
+                echo "<script language='javascript'>alert('Selecciona un huesped para agregar consumo.');</script>"; 
+    
+    
             }else{
-                  $sql = "INSERT INTO guests 
-                        (codigo, nombre, apellido, edad, sexo)
+    
+    
+    
+                  $sql = "INSERT INTO expenses 
+                        (checkinid, product, cost)
                         VALUES (
-                        '".$_POST['codigo']."',
-                        '".$_POST['nombre']."',
-                        '".$_POST['apellido']."',
-                        '".$_POST['edad']."',
-                        '".$_POST['sexo']."')";
+                        '".$_POST['HDId']."',
+                        '".$_POST['product']."',
+                        '".$_POST['cost']."'); " ;
+    
+                                    if (mysql_query($sql)) {
+    
+                                        $sql = "UPDATE checkins SET 
+                                        total= (select sum(cost) from expenses where checkinid=".$_POST['HDId']." ) 
+                                        WHERE id=".$_POST['HDId'];
+    
+                                          if (mysql_query($sql)) {
+                                             echo "<script language='javascript'>alert('Guardado correctamente.');</script>"; 
+                                        } else {
+                                            echo "<script language='javascript'>alert('Error: ". $sql ."<br>".mysql_error($con)."');</script>"; 
+                                        }
+                                    } else {
+                                        echo "<script language='javascript'>alert('Error: ". $sql ."<br>".mysql_error($con)."');</script>"; 
+                                    }
             }
-            if (mysql_query($sql)) {
-                echo "<script language='javascript'>alert('Guardado correctamente.');</script>"; 
-            } else {
-                echo "<script language='javascript'>alert('Error: ". $sql ."<br>".mysql_error($con)."');</script>"; 
-            }
+    
         }
-        if(isset($_POST['delete']))
-        {
-                $sql = "DELETE FROM guests WHERE Id=".$_POST['HDIdEditDelete'];
-                if (mysql_query($sql)) {
-                    echo "<script language='javascript'>alert('Eliminado correctamente.');</script>"; 
-                } else {
-                    echo "<script language='javascript'>alert('Error: ". $sql ."<br>".mysql_error($con)."');</script>"; 
-                }
-         }
-    if(isset($_POST['edit']))
-        {
-    
-            $sql = "SELECT id,codigo,nombre,apellido,edad,sexo FROM guests WHERE id=".$_POST['HDIdEditDelete'];
-            $result = mysql_query($sql);
-                    if (mysql_num_rows($result) > 0) {
-                                                        // output data of each row
-                                                        while($row = mysql_fetch_assoc($result)) {
-                                                            $id=$row['id'];
-                                                            $codigo=$row['codigo'];
-                                                            $nombre=$row['nombre'];
-                                                            $apellido=$row['apellido'];
-                                                            $edad=$row['edad'];
-                                                            $sexo=$row['sexo']; 
-                                                        }
-                                                    }  
-         }
-    
 ?>
 
 
@@ -63,8 +45,7 @@
     <head>
         <script>
             function SetIdRoom(id) {
-                document.getElementById("HDIdEditDelete").value = id;
-                document.getElementById("HDIdSave").value = id;
+                document.getElementById("HDId").value = id;
             };
         </script>
         <meta charset="utf-8">
@@ -107,7 +88,7 @@
                         <li>
                             <a href="index.php"><i class="fa fa-list"></i> <span class="nav-label">Inicio</span></a>
                         </li>
-                        <li class="active">
+                        <li>
                             <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Administrar</span> <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li><a href="rooms.php">Hábitaciones</a></li>
@@ -117,7 +98,7 @@
                         <li>
                             <a href="checkin.php"><i class="fa fa-desktop"></i> <span class="nav-label">Check-In</span></a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="expenses.php"><i class="fa fa-edit"></i> <span class="nav-label">Gastos</span></a>
                         </li>
                     </ul>
@@ -143,23 +124,22 @@
                 <div class="wrapper wrapper-content">
                     <div class="row">
                         <form action="" method="post" class="form-horizontal" autocomplete="off">
-                            <input type="hidden" id="HDIdEditDelete" name="HDIdEditDelete" value="<?php echo $id; ?>" />
+
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h5>Huespedes</h5>
+                                    <h5>Huespedes en hotel</h5>
 
                                 </div>
                                 <div class="ibox-content">
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>Código</th>
-                                            <th>Nombre</th>
-                                            <th>Apellido</th>
-                                            <th>Edad</th>
-                                            <th>Sexo</th>
-                                            <th></th>
-                                            <th></th>
+                                            <th>Codigo de huesped</th>
+                                            <th>Nombre de huesped</th>
+                                            <th>Codigo de habitación</th>
+                                            <th>Descripción de habitación</th>
+                                            <th>Total Parcial</th>
+                                            <th>Fecha Check-In</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -169,20 +149,20 @@
                                                 include_once "conexion.php"; 
                                                 
                                                 
-                                                    $sql = "SELECT id,codigo,nombre,apellido,edad,sexo FROM guests";
+                                                    $sql = "SELECT id, codigohuesped, nombrehuesped, codigohabitacion, descripcionhabitacion, total, arrivedate  FROM checkins";
                                                     $result = mysql_query($sql);
                                                 
                                                     if (mysql_num_rows($result) > 0) {
                                                         // output data of each row
                                                         while($row = mysql_fetch_assoc($result)) {
                                                             echo "<tr>
-                                                                    <td>".$row["codigo"]."</td>
-                                                                    <td>".$row["nombre"]."</td>
-                                                                    <td>".$row["apellido"]."</td>
-                                                                    <td>".$row["edad"]."</td>
-                                                                    <td>".$row["sexo"]."</td>
-                                                                    <td style='width: 100px;'><button name='delete' type='submit' onclick='SetIdRoom(".$row["id"].");' class='btn btn-w-m btn-danger'>Eliminar</button></td>
-                                                                    <td style='width: 100px;'><button name='edit' type='submit' onclick='SetIdRoom(".$row["id"].");' class='btn btn-w-m btn-primary'>Editar</button></td>
+                                                                    <td>".$row["codigohuesped"]."</td>
+                                                                    <td>".$row["nombrehuesped"]."</td>
+                                                                    <td>".$row["codigohabitacion"]."</td>
+                                                                    <td>".$row["descripcionhabitacion"]."</td>
+                                                                    <td>".$row["total"]."</td>
+                                                                    <td>".$row["arrivedate"]."</td>
+                                                                    <td style='width: 100px;'><button  type='button' onclick='SetIdRoom(".$row["id"]."); return false;' class='btn btn-w-m btn-primary'>Agregar consumo</button></td>
                                                                 </tr>";
                                                         }
                                                     }  
@@ -198,44 +178,24 @@
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h5>Huespedes</h5>
-
+                                    <h5>Productos consumidos</h5>
                                 </div>
                                 <div class="ibox-content">
                                     <form action="" method="post" class="form-horizontal" autocomplete="off">
-                                        <input type="hidden" id="HDIdSave" name="HDIdSave" value="<?php echo $id; ?>" />
+                                        <input type="hidden" id="HDId" name="HDId" value="<?php echo $id; ?>" />
 
-                                        <div class="form-group"><label class="col-sm-2 control-label">Código</label>
-                                            <div class="col-sm-10"><input name="codigo" type="text" class="form-control" required="" value="<?php  echo $codigo; ?>"></div>
+                                        <div class="form-group"><label class="col-sm-2 control-label">Producto</label>
+                                            <div class="col-sm-10"><input name="product" type="text" class="form-control" required=""></div>
                                         </div>
                                         <div class="hr-line-dashed"></div>
-                                        <div class="form-group"><label class="col-sm-2 control-label">Nombre</label>
-                                            <div class="col-sm-10"><input name="nombre" type="text" class="form-control" required="" value="<?php  echo $nombre; ?>"></div>
+                                        <div class="form-group"><label class="col-sm-2 control-label">Costo $</label>
+                                            <div class="col-sm-10"><input name="cost" type="text" class="form-control" required=""></div>
                                         </div>
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group"><label class="col-sm-2 control-label">Apellido</label>
-                                            <div class="col-sm-10"><input name="apellido" type="text" class="form-control" required="" value="<?php  echo $apellido; ?>"></div>
-                                        </div>
-
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group"><label class="col-sm-2 control-label">Edad</label>
-                                            <div class="col-sm-10"><input name="edad" type="text" class="form-control" required="" value="<?php  echo $edad; ?>"></div>
-                                        </div>
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group"><label class="col-sm-2 control-label">Sexo</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control m-b" name="sexo">
-                                                    <option <?php if(strpos($sexo, 'masculino') !== false){echo "selected";}?>>masculino</option>
-                                                    <option <?php if(strpos($sexo, 'femenino') !== false){echo "selected";}?>>femenino</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
                                         <div class="hr-line-dashed"></div>
                                         <div class="form-group">
                                             <div class="col-sm-4 col-sm-offset-2">
                                                 <!--<button class="btn btn-white" type="submit">Limpiar</button>-->
-                                                <button class="btn btn-primary" name="save" type="submit">Guardar</button>
+                                                <button class="btn btn-primary" name="expense" type="submit">Guardar</button>
                                             </div>
                                         </div>
                                     </form>

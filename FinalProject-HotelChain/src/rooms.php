@@ -120,9 +120,6 @@
                         <li>
                             <a href="expenses.php"><i class="fa fa-edit"></i> <span class="nav-label">Gastos</span></a>
                         </li>
-                        <li>
-                            <a href="checkout.php"><i class="fa fa-globe"></i> <span class="nav-label">Check-out</span></a>
-                        </li>
                     </ul>
                 </div>
             </nav>
@@ -251,23 +248,7 @@
 
                 </div>
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="wrapper wrapper-content">
-                            <div class="row">
-
-                            </div>
-                        </div>
-                        <div class="footer">
-                            <div class="pull-right">
-                       Electiva II
-                            </div>
-                            <div>
-                                <strong>Copyright</strong> TdeA &copy; 2017
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                 
             </div>
         </div>
         <!-- Mainly scripts -->

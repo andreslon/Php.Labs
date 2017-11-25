@@ -38,7 +38,7 @@
                                     if (mysql_num_rows($result) > 0) {
                                         // output data of each row
                                         while($row = mysql_fetch_assoc($result)) {
-                                            echo "<option value='".$row["codigo"]."'>".$row["descripcion"]."</option>";
+                                            echo "<option value='".$row["codigo"]."'>".$row["codigo"]." - ".$row["descripcion"]."</option>";
                                         }
                                     } 
                                     if(isset($_POST['save']))
@@ -47,7 +47,7 @@
                                             (CodigoHuesped, CodigoHabitacion)
                                             VALUES (
                                             '".$_POST['codigo']."',
-                                            '".$_POST['codigo']."')";
+                                            '".$_POST['habitacion']."')";
     
                                             if (mysql_query($sql)) {
                                                 echo "<script language='javascript'>alert('Guardado correctamente.');</script>"; 
